@@ -1066,8 +1066,7 @@ while true; do
 	echo "  ___   / |  __  __   _   _ "
 	echo " / __|  | |  \ \/ /  | | | |"
 	echo " \__ \  | |   >  <   | |_| |"
-	echo " |___/  |_|  /_/\_\   \__,_|"
-	echo "                            "
+	echo " |___/  |_|  /_/\_\   \____|"
 	echo "____________________________ "
 
 	echo -e "${s1xu}s1xu一键脚本工具 v$sh_v （支持Ubuntu/Debian/CentOS/Alpine系统）${bai}"
