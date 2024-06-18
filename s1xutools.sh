@@ -119,7 +119,20 @@ install_add_docker() {
 		rc-update add docker default
 		service docker start
 	else
-		curl -fsSL https://get.docker.com | sh
+		country=$(curl -s ipinfo.io/country)
+		if [ "$country" = "CN" ]; then
+			cd ~
+			curl -sS -O https://raw.gitmirror.com/kejilion/docker/main/install && chmod +x install
+			sh install --mirror Aliyun
+			rm -f install
+			cat >/etc/docker/daemon.json <<EOF
+{
+    "registry-mirrors": ["https://docker.888166.xyz"]
+}
+EOF
+		else
+			curl -fsSL https://get.docker.com | sh
+		fi
 		systemctl start docker
 		systemctl enable docker
 	fi
@@ -388,8 +401,18 @@ install_ssltls() {
 	docker stop nginx >/dev/null 2>&1
 	iptables_open
 	cd ~
-	# certbot certonly --standalone -d $yuming --email your@email.com --agree-tos --no-eff-email --force-renewal
-	certbot certonly --standalone -d $yuming --email your@email.com --agree-tos --no-eff-email --force-renewal --key-type ecdsa
+
+	certbot_version=$(certbot --version 2>&1 | grep -oP "\d+\.\d+\.\d+")
+
+	version_ge() {
+		[ "$(printf '%s\n' "$1" "$2" | sort -V | head -n1)" != "$1" ]
+	}
+
+	if version_ge "$certbot_version" "1.10.0"; then
+		certbot certonly --standalone -d $yuming --email your@email.com --agree-tos --no-eff-email --force-renewal --key-type ecdsa
+	else
+		certbot certonly --standalone -d $yuming --email your@email.com --agree-tos --no-eff-email --force-renewal
+	fi
 
 	cp /etc/letsencrypt/live/$yuming/fullchain.pem /home/web/certs/${yuming}_cert.pem
 	cp /etc/letsencrypt/live/$yuming/privkey.pem /home/web/certs/${yuming}_key.pem
@@ -1205,6 +1228,7 @@ while true; do
 			echo "7. 清理无用的docker容器和镜像网络数据卷"
 			echo "------------------------"
 			echo "8. 更换Docker源"
+			echo "9. 编辑daemon.json文件"
 			echo "------------------------"
 			echo "11. 开启Docker-ipv6访问"
 			echo "12. 关闭Docker-ipv6访问"
@@ -1530,6 +1554,16 @@ while true; do
 				bash <(curl -sSL https://linuxmirrors.cn/docker.sh)
 				;;
 
+			9)
+				clear
+				mkdir -p /etc/docker && vim /etc/docker/daemon.json
+				if command -v dnf &>/dev/null || command -v yum &>/dev/null; then
+					systemctl restart docker
+				else
+					service docker restart
+				fi
+				;;
+
 			11)
 				clear
 				docker_ipv6_on
@@ -1813,7 +1847,7 @@ while true; do
 		done
 		;;
 
-		8)
+	8)
 		while true; do
 			clear
 			echo -e "${huang}▶ LDNMP建站${bai}"
