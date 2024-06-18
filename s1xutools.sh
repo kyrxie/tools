@@ -10,7 +10,7 @@ hong='\033[31m'
 s1xu='\033[96m'
 hui='\e[37m'
 
-cp ./s1xutool.sh /usr/local/bin/xx >/dev/null 2>&1
+cp ./s1xutools.sh /usr/local/bin/xx >/dev/null 2>&1
 
 ip_address() {
 	ipv4_address=$(curl -s ipv4.ip.sb)
@@ -2876,7 +2876,7 @@ while true; do
 			1)
 				clear
 				read -p "请输入你的快捷按键: " kuaijiejian
-				echo "alias $kuaijiejian='~/s1xutool.sh'" >>~/.bashrc
+				echo "alias $kuaijiejian='~/s1xutools.sh'" >>~/.bashrc
 				source ~/.bashrc
 				echo "快捷键已设置"
 				;;
@@ -4307,7 +4307,7 @@ EOF
 			[Yy])
 				clear
 				curl -sS -O https://raw.githubusercontent.com/kyrxie/tools/main/s1xutools.sh && chmod +x s1xutools.sh
-				cp ./s1xutools.sh /usr/local/bin/k >/dev/null 2>&1
+				cp ./s1xutools.sh /usr/local/bin/xx >/dev/null 2>&1
 				echo -e "${lv}脚本已更新到最新版本！${huang}v$sh_v_new${bai}"
 				break_end
 				s1xu
