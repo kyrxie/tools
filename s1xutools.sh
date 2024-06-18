@@ -1864,7 +1864,6 @@ while true; do
 			echo "31. 站点数据管理"
 			echo "32. 备份全站数据"
 			echo "33. 定时远程备份"
-			echo "34. 还原全站数据"
 			echo "------------------------"
 			echo "35. 站点防御程序"
 			echo "------------------------"
@@ -2265,7 +2264,7 @@ while true; do
 				install_docker
 				install_certbot
 
-				install_ldnmp
+#				install_ldnmp
 
 				;;
 
