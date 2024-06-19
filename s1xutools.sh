@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sh_v="1.0.1"
+sh_v="1.0.2"
 
 huang='\033[33m'
 bai='\033[0m'
@@ -3551,8 +3551,8 @@ while true; do
 							;;
 						2)
 							read -p "请输入关闭的端口号: " c_port
-							sed -i "/--dport $c_port/d" /etc/iptables/rules.v4
-							iptables-restore </etc/iptables/rules.v4
+              sed -i "/--dport $c_port[^0-9]/d" /etc/iptables/rules.v4
+              iptables-restore </etc/iptables/rules.v4
 							;;
 
 						3)
